@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroClima - Monitoreo Climático</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Estilos generales del cuerpo */
+        body {
+            background-image: 
+                url('https://wallpapers.com/images/hd/telescope-silhouette-against-scenic-night-sky-ldy5ujr2fjlzz2ik.jpg'),
+                url('https://media.istockphoto.com/id/525108931/es/foto/dise%C3%B1o-de-fondo-de-madera-oscura.jpg?s=612x612&w=0&k=20&c=48-7-a_cejYfhS9h69I06DK2S4wN250p1p2_uM1hAyg=');
+            
+            background-size: 
+                contain, 
+                cover;   
+            
+            background-position: 
+                top center, 
+                center bottom; 
+            
+            background-repeat: 
+                no-repeat,
+                repeat-x; 
+            
+            background-attachment: fixed; 
+            
+            background-color: #000033;
+            color: #ffffff; 
+            font-family: 'Arial', sans-serif;
+            padding-top: 56px; 
+        }
+        
+        /* ====== NAVBAR ====== */
+        .navbar {
+            background-color: rgba(0, 0, 15, 0.95);
+            border-bottom: 2px solid #FF00FF; 
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #FF00FF !important;
+            text-shadow: 0 0 8px #FF00FF;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+            text-shadow: 0 0 15px #FF00FF;
+        }
+
+        .navbar-toggler.bg-info {
+            background-color: #FF00FF !important; 
+        }
+
+        /* ====== SECCIONES ====== */
+        section {
+            padding: 80px 0;
+        }
+
+        h1, h2 {
+            color: #FF00FF;
+            text-shadow: 0 0 15px rgba(255,0,255,0.6);
+            margin-bottom: 20px;
+        }
+        
+        .text-muted {
+            color: #ccc !important;
+        }
+
+        /* ====== TARJETA CLIMA ====== */
+        .card {
+            background: rgba(0, 0, 15, 0.9);
+            border: 2px solid #FF00FF;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-info {
+            background-color: #FF00FF;
+            border: none;
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-info:hover {
+            background-color: #CC00CC; 
+            transform: scale(1.05);
+        }
+
+        /* ====== MAPA WINDY ====== */
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #FF00FF;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(255,0,255,0.5);
+        }
+
+        /* ====== FOOTER ====== */
+        footer {
+            background: rgba(0, 0, 15, 0.95);
+            border-top: 1px solid #FF00FF;
+            padding: 15px;
+            text-shadow: 0 0 8px #FF00FF;
+        }
+
+        /* ====== RESPONSIVIDAD ====== */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            iframe {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#inicio">🛰️ AstroClima</a>
+            <button class="navbar-toggler bg-info" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#clima">Clima</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#windy">Mapa Windy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#mision">Misión</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container text-center" id="inicio">
+        <section>
+            <h1>🌌 Centro de Monitoreo Espacial</h1>
+            <p class="lead">Observa el clima y las condiciones atmosféricas en tu ubicación actual**.</p>
+            </section>
+
+        <section id="clima">
+            <h2>🌡️ Clima en tu Ubicación</h2> <div class="row justify-content-center mt-4">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card p-4 text-center">
+                        <p id="ubicacion" class="fw-bold fs-4">Cargando ubicación...</p> <h1 id="temperatura">--°C</h1> 
+                        
+                        <p id="condicion">Condición: --</p> 
+                        <p id="humedad">Humedad: --%</p>
+                        <p id="viento">Viento: -- km/h</p>
+                        
+                        <button class="btn btn-info mt-3" id="btn-actualizar">Actualizar Clima</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="windy">
+            <h2>🗺️ Mapa Windy en la Región</h2>
+            <p class="text-muted">Visualiza los patrones de viento y clima global.</p>
+            <iframe 
+                src="https://embed.windy.com/embed2.html?lat=-36.820&lon=-73.050&zoom=6&level=surface&overlay=wind&menu=&message=true&marker=true&calendar=now&pressure=&type=map&location=coordinates&detail=true&detailLat=-36.820&detailLon=-73.050&metricWind=default&metricTemp=default"
+                frameborder="0">
+            </iframe>
+        </section>
+
+        <section id="mision">
+            <h2>🎯 Nuestra Misión</h2>
+            <p class="lead">Combinar ciencia y tecnología para ofrecer datos climáticos precisos y visuales.  
+            Vigilamos el cielo para ti 🌎.</p>
+        </section>
+    </main>
+
+    <footer class="text-center">
+        © 2025 AstroClima | Todos los derechos reservados🚀
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const API_KEY = "1e8f8af78f527e755f5dba7707ef6e1a"; 
+        const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+        const GEO_URL = "https://api.openweathermap.org/geo/1.0/reverse";
+
+        // Función para actualizar el estado de los elementos HTML
+        function actualizarDOM(temp, condicion, humedad, viento, ubicacion) {
+            document.getElementById("temperatura").textContent = `${temp}°C`;
+            document.getElementById("condicion").textContent = `Condición: ${condicion}`;
+            document.getElementById("humedad").textContent = `Humedad: ${humedad}%`;
+            document.getElementById("viento").textContent = `Viento: ${viento} km/h`;
+            document.getElementById("ubicacion").textContent = ubicacion;
+        }
+
+        // Función para obtener los datos del clima desde la API
+        async function obtenerClima(lat, lon) {
+            const url = `${BASE_URL}?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${API_KEY}`;
+            const btn = document.getElementById('btn-actualizar');
+            const textoOriginal = btn.textContent;
+
+            btn.textContent = 'Obteniendo Clima...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Error en la API: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                // Obtener el nombre de la ubicación con la API de Geocoding inversa
+                const geoUrl = `${GEO_URL}?lat=${lat}&lon=${lon}&limit=1&appid=${API_KEY}`;
+                const geoResponse = await fetch(geoUrl);
+                const geoData = await geoResponse.json();
+                
+                const nombreCiudad = geoData[0]?.name || "Ubicación Desconocida";
+                const nombreRegion = geoData[0]?.state || geoData[0]?.country || "";
+
+                // Formatear los datos
+                const temperatura = Math.round(data.main.temp);
+                const condicionTexto = data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1);
+                const humedad = data.main.humidity;
+                const velocidadViento = (data.wind.speed * 3.6).toFixed(1); // Convertir m/s a km/h
+                
+                const ubicacionCompleta = `${nombreCiudad} ${nombreRegion ? `, ${nombreRegion}` : ''}`;
+
+                // Actualizar la interfaz
+                actualizarDOM(temperatura, condicionTexto, humedad, velocidadViento, ubicacionCompleta);
+                console.log("Clima actualizado:", data);
+
+            } catch (error) {
+                console.error("Error al obtener datos del clima:", error);
+                alert("No se pudo obtener el clima. Asegúrate de que la API Key sea correcta y de no haber superado el límite de llamadas.");
+                document.getElementById("ubicacion").textContent = "Error al cargar";
+                document.getElementById("temperatura").textContent = "--°C"; 
+            } finally {
+                btn.textContent = textoOriginal;
+                btn.disabled = false;
+            }
+        }
+
+        // Función principal para obtener la ubicación del usuario
+        function obtenerUbicacionYClima() {
+            const ubicacionElement = document.getElementById("ubicacion");
+            const btn = document.getElementById('btn-actualizar');
+            
+            if (!navigator.geolocation) {
+                ubicacionElement.textContent = "Geolocalización no soportada por el navegador.";
+                btn.disabled = true;
+                return;
+            }
+
+            ubicacionElement.textContent = "Buscando ubicación...";
+            btn.disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    // Llama a la API con las coordenadas
+                    obtenerClima(lat, lon);
+                },
+                (error) => {
+                    let mensajeError = "Error al obtener la ubicación.";
+                    if (error.code === error.PERMISSION_DENIED) {
+                        mensajeError = "Permiso de ubicación denegado. Por favor, habilítalo para continuar.";
+                    } else if (error.code === error.POSITION_UNAVAILABLE) {
+                        mensajeError = "Información de ubicación no disponible.";
+                    } else if (error.code === error.TIMEOUT) {
+                        mensajeError = "Tiempo de espera agotado para la ubicación.";
+                    }
+                    ubicacionElement.textContent = mensajeError;
+                    btn.disabled = false;
+                    console.error("Error de Geolocalización:", error);
+                    alert(mensajeError);
+                }
+            );
+        }
+        
+        // Carga el clima inicial al abrir la página
+        document.addEventListener('DOMContentLoaded', obtenerUbicacionYClima);
+
+        // Asocia la función de actualización al evento 'click' del botón
+        document.getElementById('btn-actualizar').addEventListener('click', obtenerUbicacionYClima);
+    </script>
+</body>
+</html>
